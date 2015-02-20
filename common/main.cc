@@ -31,7 +31,6 @@
 
 #include "cpu.h"
 #include "memory.h"
-#include "load.h"
 
 std::string cpu_string( unsigned int cpu_usage_delay, unsigned int graph_lines,
 	bool use_colors = false )
@@ -54,13 +53,13 @@ std::string cpu_string( unsigned int cpu_usage_delay, unsigned int graph_lines,
 
   if( graph_lines > 0)
   {
-    oss << " [";
+    oss << "[";
     oss << get_graph_by_percentage( unsigned( percentage ), graph_lines );
     oss << "]";
   }
   oss.width( 5 );
   oss << percentage;
-  oss << "%";
+  oss << "% ";
   if( use_colors )
   {
     oss << "#[fg=default,bg=default]";
@@ -155,8 +154,7 @@ int main( int argc, char** argv )
   }
 
   std::cout << mem_string( use_colors )
-    << cpu_string( cpu_usage_delay, graph_lines, use_colors ) << ' '
-    << load_string( use_colors );
+    << cpu_string( cpu_usage_delay, graph_lines, use_colors );
 
   return EXIT_SUCCESS;
 }

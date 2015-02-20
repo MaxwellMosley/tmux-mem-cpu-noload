@@ -4,12 +4,16 @@
 
 import matplotlib.cm
 
-def write_table(fp, colormap_name, stat_name, first_half_foreground, second_half_foreground):
+def write_table(fp, colormap_name, stat_name, first_half_foreground, second_half_foreground, invert):
     fp.write('static const char ')
     fp.write(stat_name)
     fp.write('_lut[][32] = {\n')
     colormap = matplotlib.cm.get_cmap(colormap_name)
-    for ii in range(101):
+    if invert:
+        rangee = range(101, 0, -1)
+    else:
+        rangee = range(101)
+    for ii in rangee:
         fp.write('"#[fg=')
         if ii < 50:
             fp.write(first_half_foreground)
@@ -23,7 +27,7 @@ def write_table(fp, colormap_name, stat_name, first_half_foreground, second_half
         color = 16 + 36*red + 6*green + blue;
         fp.write(str(color))
         fp.write(']"')
-        if ii != 100:
+        if ii != 0 if invert else 100:
             fp.write(',')
         fp.write('\n')
     fp.write('}; // end ')
@@ -36,8 +40,7 @@ with open('luts.h', 'w') as fp:
 
     # hot colormap with white fg for the first half
     # and black fg for the second half
-    write_table(fp, 'hot', 'cpu_percentage', 'brightwhite', 'black')
-    write_table(fp, 'gist_earth', 'mem', 'brightwhite', 'black')
-    write_table(fp, 'bone', 'load', 'brightwhite', 'black')
+    write_table(fp, 'hot', 'cpu_percentage', 'brightwhite', 'black', True)
+    write_table(fp, 'gist_earth', 'mem', 'brightwhite', 'black', False)
 
     fp.write('#endif\n')

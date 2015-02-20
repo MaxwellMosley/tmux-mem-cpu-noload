@@ -59,7 +59,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 # detect system type
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   message(STATUS "Linux detected")
-  set(METER_SOURCES "linux/memory.cc" "linux/cpu.cc" "common/load.cc")
+  set(METER_SOURCES "linux/memory.cc" "linux/cpu.cc")
 else()
   message(FATAL_ERROR "Cannot be compiled on this system")
 endif()

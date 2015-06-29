@@ -107,6 +107,12 @@ The full usage::
            Prints this help message
   --colors
           Use tmux colors in output
+  --cpu-only
+          Only display cpu information
+  --memory-only
+          Only display memory information
+  --percents
+          Display memory usage as a percent
   -i <value>, --interval <value>
           Set tmux status refresh interval in seconds. Default: 1 second
   -g <value>, --graph-lines <value>

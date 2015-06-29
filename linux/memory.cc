@@ -24,7 +24,7 @@
 #include "luts.h"
 #include "conversions.h"
 
-std::string mem_string( bool use_colors = false )
+std::string mem_string( bool use_colors = false, bool use_percents = false )
 {
   using std::string;
   using std::ifstream;
@@ -89,11 +89,18 @@ std::string mem_string( bool use_colors = false )
     oss << mem_lut[(100 * used_mem) / total_mem];
   }
 
+  if (use_percents) {
+    char s[25];
+    sprintf(s, "%2.2f%%", (float) used_mem / (float) total_mem * 100.0);
+    oss << s;
+  }
   // we want megabytes on output, but since the values already come as
   // kilobytes we need to divide them by 1024 only once, thus we use
   // KILOBYTES
-  oss << ' ' << convert_unit(used_mem, MEGABYTES, KILOBYTES) << '/'
-    << convert_unit(total_mem, MEGABYTES, KILOBYTES) << "MB ";
+  else {
+    oss << ' ' << convert_unit(used_mem, MEGABYTES, KILOBYTES) << '/'
+        << convert_unit(total_mem, MEGABYTES, KILOBYTES) << "MB ";
+  }
 
   if( use_colors )
   {

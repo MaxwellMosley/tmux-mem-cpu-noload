@@ -92,6 +92,9 @@ int main( int argc, char** argv )
   unsigned cpu_usage_delay = 990000;
   short graph_lines = 10; // max 32767 should be enough
   bool use_colors = false;
+  bool memory_only = false;
+  bool cpu_only = false;
+  bool use_percents = false;
 
   static struct option long_options[] =
   {
@@ -101,6 +104,9 @@ int main( int argc, char** argv )
     // otherwise it's a value to set the variable *flag points to
     { "help", no_argument, NULL, 'h' },
     { "colors", no_argument, NULL, 'c' },
+    { "memory-only", no_argument, NULL, 'm' },
+    { "cpu-only", no_argument, NULL, 'u' },
+    { "percents", no_argument, NULL, 'p' },
     { "interval", required_argument, NULL, 'i' },
     { "graph-lines", required_argument, NULL, 'g' },
     { 0, 0, 0, 0 } // used to handle unknown long options
@@ -135,6 +141,15 @@ int main( int argc, char** argv )
           }
         graph_lines = atoi( optarg );
         break;
+      case 'm': // --memory-only, -m
+        memory_only = true;
+        break;
+      case 'u': // --cpu-only, -u
+        cpu_only = true;
+        break;
+      case 'p': // --percents, -p
+        use_percents = true;
+        break;
       case '?':
         // getopt_long prints error message automatically
         return EXIT_FAILURE;
@@ -153,8 +168,13 @@ int main( int argc, char** argv )
     return EXIT_FAILURE;
   }
 
-  std::cout << mem_string( use_colors )
-    << cpu_string( cpu_usage_delay, graph_lines, use_colors );
+  if (memory_only)
+    std::cout << mem_string(use_colors, use_percents);
+  else if (cpu_only)
+    std::cout << cpu_string(cpu_usage_delay, graph_lines, use_colors);
+  else
+    std::cout << mem_string( use_colors, use_percents) << ' '
+              << cpu_string( cpu_usage_delay, graph_lines, use_colors);
 
   return EXIT_SUCCESS;
 }
